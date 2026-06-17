@@ -1,6 +1,7 @@
 import logging
 import os
 import re
+import json
 import httpx
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
@@ -20,17 +21,23 @@ def fetch_website(url: str) -> dict | None:
         return None
 
     try:
-        return _fetch_with_scrapling(url)
+        result = _fetch_with_scrapling(url)
+        if result is not None:
+            return result
     except Exception as e:
         log.debug("Website Scrapling failed for %s: %s", url, e)
 
     try:
-        return _fetch_with_bs4(url)
+        result = _fetch_with_bs4(url)
+        if result is not None:
+            return result
     except Exception as e:
         log.debug("Website BS4 failed for %s: %s", url, e)
 
     try:
-        return _fetch_with_llm(url)
+        result = _fetch_with_llm(url)
+        if result is not None:
+            return result
     except Exception as e:
         log.warning("Website LLM fallback failed for %s: %s", url, e)
 
@@ -74,7 +81,6 @@ def _fetch_with_llm(url: str) -> dict | None:
             ),
         }],
     )
-    import json
     text = message.content[0].text.strip()
     try:
         data = json.loads(text)
