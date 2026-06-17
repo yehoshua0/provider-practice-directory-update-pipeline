@@ -1,0 +1,62 @@
+[
+  {
+    "provider_id": "HL_001",
+    "npi": "1234567890",
+    "provider_name": "John Smith, MD",
+    "specialty": "Cardiology",
+    "practice_name": "ABC Heart Group",
+    "address": "100 Main St, Naples, FL 34102",
+    "phone": "239-555-1234",
+    "website": "https://abcheartgroup.com",
+    "active": true,
+    "last_verified_date": "2023-09-01"
+  },
+  {
+    "provider_id": "HL_002",
+    "npi": "9876543210",
+    "provider_name": "Maria Garcia, DO",
+    "specialty": "Family Medicine",
+    "practice_name": "Sunshine Primary Care",
+    "address": "500 Oak Ave, Miami, FL 33101",
+    "phone": "305-555-7890",
+    "website": "https://sunshineprimarycare.com",
+    "active": true,
+    "last_verified_date": "2024-01-15"
+  },
+  {
+    "provider_id": "HL_003",
+    "npi": "1122334455",
+    "provider_name": "Robert Lee, MD",
+    "specialty": "Orthopedic Surgery",
+    "practice_name": "Florida Bone & Joint",
+    "address": "300 Pine Rd, Tampa, FL 33601",
+    "phone": "813-555-2345",
+    "website": "https://floridaboneandjoint.com",
+    "active": true,
+    "last_verified_date": "2022-06-10"
+  },
+  {
+    "provider_id": "HL_004",
+    "npi": "5566778899",
+    "provider_name": "Susan Chen, MD",
+    "specialty": "Dermatology",
+    "practice_name": "Clear Skin Dermatology",
+    "address": "750 Coral Way, Coral Gables, FL 33134",
+    "phone": "305-555-4567",
+    "website": "https://clearskinderm.com",
+    "active": true,
+    "last_verified_date": "2023-03-20"
+  },
+  {
+    "provider_id": "HL_005",
+    "npi": "2233445566",
+    "provider_name": "James Wilson, MD",
+    "specialty": "Internal Medicine",
+    "practice_name": "Wilson Medical Associates",
+    "address": "1200 Brickell Ave, Miami, FL 33131",
+    "phone": "305-555-8901",
+    "website": "",
+    "active": true,
+    "last_verified_date": "2021-11-05"
+  }
+]
