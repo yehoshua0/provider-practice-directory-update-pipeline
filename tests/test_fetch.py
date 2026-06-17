@@ -3,6 +3,7 @@ import httpx
 from unittest.mock import patch, MagicMock
 from pipeline.sources.nppes import fetch_nppes
 from pipeline.sources.cms import fetch_cms
+from pipeline.sources.board.florida import fetch_florida_board
 
 NPPES_RESPONSE = {
     "result_count": 1,
@@ -102,5 +103,13 @@ def test_fetch_cms_not_found():
         mock_get.return_value = mock_resp
 
         result = fetch_cms("0000000000")
+
+    assert result is None
+
+
+def test_fetch_florida_board_returns_none_on_scrape_error():
+    with patch("pipeline.sources.board.florida.PlayWrightFetcher") as mock_cls:
+        mock_cls.return_value.fetch.side_effect = Exception("scrape error")
+        result = fetch_florida_board("1234567890", "John Smith")
 
     assert result is None
