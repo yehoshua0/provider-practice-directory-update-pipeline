@@ -32,7 +32,7 @@ def fetch_cms(npi: str) -> dict | None:
 
     row = results[0]
     name_parts = [row.get("frst_nm", ""), row.get("lst_nm", "")]
-    provider_name = " ".join(p for p in name_parts if p).title()
+    provider_name = " ".join(p for p in name_parts if p)
 
     return {
         "provider_name": provider_name,

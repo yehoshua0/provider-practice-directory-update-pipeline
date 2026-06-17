@@ -1,5 +1,4 @@
-from typing import Literal
-from typing_extensions import TypedDict
+from typing import Literal, TypedDict
 
 
 class ProviderRecord(TypedDict):

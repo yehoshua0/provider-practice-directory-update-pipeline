@@ -41,7 +41,7 @@ def fetch_nppes(npi: str) -> dict | None:
         basic.get("last_name", ""),
         basic.get("credential", ""),
     ]
-    provider_name = " ".join(p for p in name_parts if p).title()
+    provider_name = " ".join(p for p in name_parts if p)
 
     addr_parts = [
         location.get("address_1", ""),

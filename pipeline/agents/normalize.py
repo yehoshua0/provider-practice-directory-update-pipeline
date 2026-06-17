@@ -3,9 +3,6 @@ from pipeline.normalizers.phone import normalize_phone
 from pipeline.normalizers.name import normalize_name
 from pipeline.state import PipelineState, ProviderRecord
 
-_NORMALIZABLE_FIELDS = ["provider_name", "address", "phone", "specialty", "practice_name"]
-
-
 def normalize_node(state: PipelineState) -> PipelineState:
     normalized: dict[str, ProviderRecord] = {}
 

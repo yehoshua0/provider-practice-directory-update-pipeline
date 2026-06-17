@@ -55,7 +55,7 @@ def test_fetch_nppes_returns_fields():
         result = fetch_nppes("1234567890")
 
     assert result is not None
-    assert result["provider_name"] == "John Smith Md"
+    assert result["provider_name"] == "JOHN SMITH MD"
     assert "FORT MYERS" in result["address"]
     assert result["phone"] == "239-555-9000"
     assert result["specialty"] == "Cardiovascular Disease"

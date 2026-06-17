@@ -1,6 +1,6 @@
 from pipeline.state import FieldDiff, PipelineState
 
-_COMPARED_FIELDS = ["provider_name", "specialty", "practice_name", "address", "phone", "active"]
+_COMPARED_FIELDS = ["provider_name", "specialty", "practice_name", "address", "phone"]
 
 
 def compare_node(state: PipelineState) -> PipelineState:

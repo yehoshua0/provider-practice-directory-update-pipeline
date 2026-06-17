@@ -35,7 +35,7 @@ def _wrap(node_fn):
 
 
 def _route_after_fetch(state: PipelineState) -> str:
-    if state.get("error") or not state["raw_sources"].get("nppes"):
+    if state.get("error"):
         return "error_handler"
     return "normalize"
 

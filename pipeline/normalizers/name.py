@@ -1,5 +1,3 @@
-import re
-
 _CREDENTIALS = {"MD", "DO", "PhD", "NP", "PA", "DDS", "DPM", "OD", "DC", "RN"}
 
 
