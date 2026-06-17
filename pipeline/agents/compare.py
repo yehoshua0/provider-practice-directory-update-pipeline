@@ -18,7 +18,10 @@ def compare_node(state: PipelineState) -> PipelineState:
         values_by_source: dict[str, str] = {}
 
         for source_name, norm_record in normalized.items():
-            new_val = str(norm_record.get(field, ""))
+            val = norm_record.get(field)
+            if val is None:
+                continue
+            new_val = str(val)
             if new_val:
                 values_by_source[source_name] = new_val
 

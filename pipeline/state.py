@@ -11,7 +11,7 @@ class ProviderRecord(TypedDict):
     address: str
     phone: str
     website: str
-    active: bool
+    active: bool | None
     last_verified_date: str  # ISO 8601 date string
 
 

@@ -54,7 +54,8 @@ def upsert_provider(conn: sqlite3.Connection, record: ProviderRecord) -> None:
         (
             record["provider_id"], record["npi"], record["provider_name"],
             record["specialty"], record["practice_name"], record["address"],
-            record["phone"], record["website"], int(record["active"]),
+            record["phone"], record["website"],
+            int(record["active"]) if record["active"] is not None else None,
             record["last_verified_date"],
         ),
     )

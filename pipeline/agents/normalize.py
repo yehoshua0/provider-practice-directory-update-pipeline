@@ -22,7 +22,7 @@ def normalize_node(state: PipelineState) -> PipelineState:
             address=normalize_address(raw.get("address", "")),
             phone=normalize_phone(raw.get("phone", "")),
             website=raw.get("website", ""),
-            active=bool(raw.get("active", True)),
+            active=raw.get("active"),
             last_verified_date=state["record"]["last_verified_date"],
         )
 

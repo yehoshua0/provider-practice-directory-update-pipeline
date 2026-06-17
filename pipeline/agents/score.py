@@ -49,20 +49,36 @@ def overall_confidence(diffs: list[FieldDiff]) -> float:
 
 
 def score_node(state: PipelineState) -> PipelineState:
-    record = state["record"]
     normalized = state["normalized"]
 
     scored_diffs: list[FieldDiff] = []
     for diff in state["diffs"]:
         field = diff["field"]
-        values_by_source = {
-            src: str(norm.get(field, ""))
-            for src, norm in normalized.items()
-            if norm.get(field, "")
-        }
-        scored_diffs.append(
-            score_field(field, values_by_source, str(record.get(field, "")))
-        )
+        reference_value = diff["new_value"]  # use compare_node's value
+
+        agreeing = []
+        total_weight = 0.0
+        agree_weight = 0.0
+
+        for src, norm in normalized.items():
+            src_val = str(norm.get(field, "")) if norm.get(field) is not None else ""
+            if not src_val:
+                continue
+            w = SOURCE_WEIGHTS.get(src, 0.5)
+            total_weight += w
+            if src_val.upper() == reference_value.upper():
+                agree_weight += w
+                agreeing.append(src)
+
+        confidence = round(agree_weight / total_weight, 4) if total_weight else 0.0
+
+        scored_diffs.append(FieldDiff(
+            field=field,
+            old_value=diff["old_value"],
+            new_value=diff["new_value"],  # preserve — never overwrite
+            confidence_score=confidence,
+            supporting_sources=agreeing,
+        ))
 
     conf = overall_confidence(scored_diffs)
     return {**state, "diffs": scored_diffs, "overall_confidence": conf}
