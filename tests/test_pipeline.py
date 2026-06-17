@@ -8,6 +8,7 @@ from pipeline.agents.normalize import normalize_node
 from pipeline.agents.compare import compare_node
 from pipeline.agents.router import router_node
 from pipeline.state import FieldDiff, PipelineState, ProviderRecord
+from pipeline.orchestrator import run_pipeline
 
 
 def _make_conn() -> sqlite3.Connection:
@@ -270,3 +271,37 @@ def test_router_address_requires_two_sources_for_auto_update():
 
     result = router_node(state)
     assert result["recommended_action"] == "human_review"
+
+
+# ---------------------------------------------------------------------------
+# Task 14: Orchestrator
+# ---------------------------------------------------------------------------
+
+def test_run_pipeline_auto_update_end_to_end():
+    conn = _make_conn()
+    record = ProviderRecord(
+        provider_id="HL_001", npi="1234567890", provider_name="John Smith MD",
+        specialty="Cardiology", practice_name="ABC Heart Group",
+        address="100 Main St, Naples, FL 34102", phone="239-555-1234",
+        website="", active=True, last_verified_date="2023-09-01",
+    )
+    upsert_provider(conn, record)
+    conn.commit()
+
+    nppes_data = {
+        "provider_name": "John Smith MD", "specialty": "Cardiovascular Disease",
+        "practice_name": "", "active": True,
+        "address": "250 Health Park Dr, Fort Myers, FL 33908",
+        "phone": "239-555-9000",
+    }
+
+    with patch("pipeline.agents.fetch.fetch_nppes", return_value=nppes_data), \
+         patch("pipeline.agents.fetch.fetch_cms", return_value={"provider_name": "John Smith", "specialty": "CARDIOVASCULAR DISEASE", "practice_name": "Fort Myers Heart Center", "active": True, "address": "250 Health Park Dr, Fort Myers, FL 33908", "phone": "239-555-9000"}), \
+         patch("pipeline.agents.fetch.fetch_florida_board", return_value=None), \
+         patch("pipeline.agents.fetch.fetch_website", return_value=None):
+        result = run_pipeline(record, conn)
+
+    assert result["recommended_action"] in ("auto_update", "human_review")
+    assert result["error"] is None
+    assert len(result["diffs"]) > 0
+    conn.close()
