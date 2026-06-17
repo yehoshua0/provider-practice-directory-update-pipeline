@@ -25,6 +25,8 @@ def _error_handler(state: PipelineState) -> PipelineState:
 
 def _wrap(node_fn):
     def wrapped(state: PipelineState) -> PipelineState:
+        if state.get("error"):
+            return state  # already failed; skip this node
         try:
             return node_fn(state)
         except Exception as e:
@@ -54,7 +56,12 @@ def build_graph():
     graph.add_edge("normalize", "compare")
     graph.add_edge("compare",   "score")
     graph.add_edge("score",     "route")
-    graph.add_edge("route",     END)
+
+    def _route_after_route(state: PipelineState) -> str:
+        return "error_handler" if state.get("error") else END
+
+    graph.add_conditional_edges("route", _route_after_route,
+                                 {"error_handler": "error_handler", END: END})
     graph.add_edge("error_handler", END)
 
     return graph.compile()
@@ -85,6 +92,11 @@ def run_pipeline(record: ProviderRecord, conn: sqlite3.Connection) -> PipelineSt
     result: PipelineState = _get_graph().invoke(initial)
 
     with conn:
+        if result.get("error"):
+            # Pipeline failed — record the error but do NOT update last_verified_date
+            log_decision(conn, result)
+            return result
+
         if result["recommended_action"] == "auto_update":
             updated = {**record}
             for diff in result["diffs"]:
@@ -109,4 +121,10 @@ def run_pipeline(record: ProviderRecord, conn: sqlite3.Connection) -> PipelineSt
 def run_batch(conn: sqlite3.Connection, days: int = 90) -> list[PipelineState]:
     stale = detect_stale(conn, days=days)
     log.info("Processing %d stale records", len(stale))
-    return [run_pipeline(record, conn) for record in stale]
+    results = []
+    for record in stale:
+        try:
+            results.append(run_pipeline(record, conn))
+        except Exception as e:
+            log.error("run_batch: unhandled error for %s: %s", record["provider_id"], e)
+    return results
