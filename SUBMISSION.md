@@ -149,7 +149,7 @@ At **1M records: ~$40** in LLM cost. Human review is targeted to **<15%** of rec
 
 ## Attachments / Links
 
-- [ ] GitHub repo link — *(no git remote configured yet; push and paste URL)*
+- [x] GitHub repo link — https://github.com/yehoshua0/provider-practice-directory-update-pipeline
 - [x] Prototype demo — `notebooks/demo_executed.ipynb` (end-to-end, executed)
 - [x] Agent workflow diagram — included above + `docs/.../pipeline-architecture-design.md`
 - [x] Sample audit log output — SQLite `audit_log` table, shown in demo
@@ -164,5 +164,5 @@ At **1M records: ~$40** in LLM cost. Human review is targeted to **<15%** of rec
 - [x] Audit log sample shown
 - [x] Architecture diagram included
 - [x] Prototype runs end-to-end (39/39 tests pass)
-- [ ] GitHub/code link attached *(needs remote)*
+- [x] GitHub/code link attached
 - [ ] Thumbnail image uploaded (560×280)
